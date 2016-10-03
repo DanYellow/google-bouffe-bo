@@ -77,8 +77,9 @@ class Question
 
     public function jsonSerialize()
     {
-        var_dump($this->answers->toArray());
+        // var_dump($this->answers->toArray());
         return array(
+            'hash' => $this->hash,
             'question' => $this->question,
             'answers'=> array_map(function($answer) {
                 return $answer->jsonSerialize();

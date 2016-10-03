@@ -62,6 +62,7 @@ class Answer
     public function jsonSerialize()
     {
         return array(
+            'id' => $this->id,
             'response' => $this->response,
             'URL' => $this->URL,
             'nbResponses' => $this->nbResponses,
@@ -169,5 +170,12 @@ class Answer
     public function getURL()
     {
         return $this->URL;
+    }
+
+    public function vote()
+    {
+        $this->nbResponses += 1;
+
+        return $this;
     }
 }
