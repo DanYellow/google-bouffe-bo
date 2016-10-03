@@ -49,7 +49,7 @@ class Question
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="Question")
      */
     private $answers;
 
@@ -221,5 +221,16 @@ class Question
     public function getLimitDate()
     {
         return $this->limitDate;
+    }
+
+    public function getResults()
+    {
+        return array_map(function($answer) {
+            $obj = array(
+                'title' => $answer->getResponse(),
+                'nbResponses' => $answer->getNbResponses()
+            );
+            return $obj;
+        }, $this->answers->toArray());
     }
 }

@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use SurveyBundle\Entity\Answer as Answer;
 use SurveyBundle\Entity\Question as Question;
@@ -26,18 +27,18 @@ class SurveyController extends Controller
   }
 
   /**
-   * Matches /blog/*
    *
    * @Route("/create", name="create_survey")
    * @Route("/create/", name="create_survey")
    *
-   * /survey/create/?datas=
+   * 
+   * @Method({"GET", "POST"})
    */
   public function createAction(Request $request)
   {
-    if ($request->isMethod('POST')) {
-      return new JsonResponse(array('ERREUR' => 'ERREUR'));
-    }
+    // if ($request->isMethod('POST')) {
+    //   return new JsonResponse(array('ERREUR' => 'ERREUR'));
+    // } /survey/create/?datas=
 
     $question = new Question();
 
@@ -58,20 +59,25 @@ class SurveyController extends Controller
         $answer->setQuestion($question);
 
         $em->persist($answer);
+        // $em->flush();
     }
 
     $em->persist($question);
     $em->flush();
 
-    return new JsonResponse(array(
-      'response' => 'success',
-      'url' => '/survey/' . $question->getHash()
-    ));
+    $jsonResponse = new Response(json_encode(array(
+      'response' => array('url' => '/survey/' . $question->getHash())
+    )));
+    $jsonResponse->headers->set('Access-Control-Allow-Origin', '*');
+    $jsonResponse->headers->set('Content-Type', 'application/json');
+    
+    return $jsonResponse;
   }
 
   /**
    *
    * @Route("/{hash}", name="get_survey")
+   * @Route("/{hash}/", name="get_survey")
    */
   public function displayAction(Request $request) {
     if ($request->isMethod('POST')) {
@@ -85,7 +91,13 @@ class SurveyController extends Controller
 
     $survey = $repository->findOneByHash($hash);
 
-    $jsonResponse = new Response(json_encode(array( 'response' => $survey->jsonSerialize() )) );
+    if (!isset($survey)) {
+      $jsonResponse = new Response(json_encode(array( 'error' => 'Ce vote n\'existe plus' )) );
+    } else {
+      $jsonResponse = new Response(json_encode(array( 'response' => $survey->jsonSerialize() )) );
+    }
+
+    
     $jsonResponse->headers->set('Access-Control-Allow-Origin', '*');
     $jsonResponse->headers->set('Content-Type', 'application/json');
     
@@ -95,9 +107,10 @@ class SurveyController extends Controller
   /**
    *
    * @Route("/{hash}/{voteID}", name="vote_survey_for")
+   * @Method({"POST"})
    */
   public function voteAction(Request $request) {
-    if ($request->isMethod('POST')) {
+    if ($request->isMethod('GET')) {
       return new JsonResponse(array('ERREUR' => 'ERREUR'));
     }
 
@@ -121,6 +134,30 @@ class SurveyController extends Controller
     $em->flush();
 
     $jsonResponse = new Response(json_encode(array( 'response' => 'Vous avez voté pour ' . $answer->getResponse() )) );
+    $jsonResponse->headers->set('Access-Control-Allow-Origin', '*');
+    $jsonResponse->headers->set('Content-Type', 'application/json');
+
+    return $jsonResponse;
+  }
+
+  /**
+   *
+   * @Route("/results/{hash}", name="results_survey_for")
+   */
+  public function resultsAction(Request $request) {
+    if ($request->isMethod('POST')) {
+      return new JsonResponse(array('ERREUR' => 'ERREUR'));
+    }
+
+    $hash = $this->getRequest()->get('hash');
+    
+    $em = $this->getDoctrine()->getManager();
+
+    $repository = $em->getRepository('SurveyBundle\Entity\Question');
+
+    $survey = $repository->findOneByHash($hash);
+
+    $jsonResponse = new Response(json_encode(array( 'response' => $survey->getResults() )) );
     $jsonResponse->headers->set('Access-Control-Allow-Origin', '*');
     $jsonResponse->headers->set('Content-Type', 'application/json');
 
