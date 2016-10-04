@@ -49,7 +49,7 @@ class Question
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Answer", mappedBy="Question")
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
      */
     private $answers;
 
@@ -66,7 +66,7 @@ class Question
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->hash      = uniqid('survey_');
+        $this->hash      = uniqid();
         $this->answers = new ArrayCollection();
 
         $date = new \DateTime();

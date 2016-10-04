@@ -29,16 +29,14 @@ class SurveyController extends Controller
   /**
    *
    * @Route("/create", name="create_survey")
-   * @Route("/create/", name="create_survey")
-   *
    * 
-   * @Method({"GET", "POST"})
+   * @Method({"GET"})
    */
   public function createAction(Request $request)
   {
     // if ($request->isMethod('POST')) {
     //   return new JsonResponse(array('ERREUR' => 'ERREUR'));
-    // } /survey/create/?datas=
+    // } 
 
     $question = new Question();
 
@@ -77,7 +75,6 @@ class SurveyController extends Controller
   /**
    *
    * @Route("/{hash}", name="get_survey")
-   * @Route("/{hash}/", name="get_survey")
    */
   public function displayAction(Request $request) {
     if ($request->isMethod('POST')) {
@@ -92,7 +89,7 @@ class SurveyController extends Controller
     $survey = $repository->findOneByHash($hash);
 
     if (!isset($survey)) {
-      $jsonResponse = new Response(json_encode(array( 'error' => 'Ce vote n\'existe plus' )) );
+      $jsonResponse = new Response(json_encode(array( 'error' => 'Ce sondage n\'existe plus' )) );
     } else {
       $jsonResponse = new Response(json_encode(array( 'response' => $survey->jsonSerialize() )) );
     }
