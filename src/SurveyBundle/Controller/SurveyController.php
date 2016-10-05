@@ -30,7 +30,7 @@ class SurveyController extends Controller
    *
    * @Route("/create", name="create_survey")
    * 
-   * @Method({"GET"})
+   * @Method({"POST"})
    */
   public function createAction(Request $request)
   {

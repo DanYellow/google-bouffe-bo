@@ -9,6 +9,7 @@ php app/console server:run
 
 SF2 commands :
 - Get list routes : php app/console router:debug
+- Create bundle : php app/console generate:bundle
 
 MYSQL Commands
 - Connect to database : mysql -u root -p
