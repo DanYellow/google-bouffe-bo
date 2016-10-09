@@ -17,5 +17,6 @@ MYSQL Commands
 
 Doctrine Commands
 - Generate entities : php app/console doctrine:generate:entities
+- Create entity : php app/console generate:doctrine:entity
 - Create database : php app/console doctrine:database:create
 - Update database : php app/console doctrine:schema:update --force --dump-sql
