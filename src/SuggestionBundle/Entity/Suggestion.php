@@ -31,14 +31,14 @@ class Suggestion
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255)
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
      */
     private $address;
 
@@ -69,6 +69,8 @@ class Suggestion
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->description = "";
+        $this->address = "";
         $this->isAdded = false;
     }
 

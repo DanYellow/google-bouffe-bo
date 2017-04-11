@@ -86,7 +86,6 @@ class SurveyController extends Controller
       $jsonResponse = new Response(json_encode(array( 'response' => $survey->jsonSerialize() )) );
     }
 
-    
     $jsonResponse->headers->set('Access-Control-Allow-Origin', '*');
     $jsonResponse->headers->set('Content-Type', 'application/json');
     
@@ -114,7 +113,7 @@ class SurveyController extends Controller
 
     $repositoryAnswer = $em->getRepository('SurveyBundle\Entity\Answer');
     $answer = $repositoryAnswer->findOneBy(
-        array('question' => $survey->getID(), 'id' => $voteID)
+      array('question' => $survey->getID(), 'id' => $voteID)
     );
 
     $answer->vote();
