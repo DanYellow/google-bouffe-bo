@@ -1,3 +1,9 @@
+Requirements
+================
+- Survey to vote for lunch time with the Majority judgment system
+- Administration / Add new lunch place (future)
+
+
 google-bouffe-bo
 ================
 
@@ -21,7 +27,3 @@ Doctrine Commands
 - Create database : php app/console doctrine:database:create
 - Update database : php app/console doctrine:schema:update --force --dump-sql
 
-google-bouffe-bo
-================
-- Survey to vote for lunch time with the Majority judgment system
-- Administration / Add new lunch place (future)
